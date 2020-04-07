@@ -2,10 +2,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
+    transition: all .4s ease-in-out;
+}
+
+.todo-list__item_completed > .todo-list__item-label {
+    color:#55ff55;
+    text-decoration: line-through;
 }
 
 .todo-list__item-delete {
     background-color: #000;
+    border-radius: 50%;
     cursor: pointer;
     width: 20px;
     height: 20px;

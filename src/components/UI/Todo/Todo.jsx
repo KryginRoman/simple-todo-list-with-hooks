@@ -5,20 +5,29 @@ import './Todo.css';
 
 export default () => {
   const [fieldValue, setFieldValue] = useState("");
+  const [isTouchedFieldValue, setTouchedFieldValue] = useState(false);
   const [todoList, setTodoList] = useState([]);
+  const [maxLength] = useState(12);
   const onChangeFieldValueHandler = ({ target }) => {
+    setTouchedFieldValue(true);
     setFieldValue(target.value)
   };
   const onAddTodoHandler = () => {
+    const label = fieldValue.toLocaleLowerCase();
+    const isEqualLabel = todoList.filter(todo => todo.label === label).length;
+
+    if (isEqualLabel) return;
+
     const itemId = todoList.length + 1;
     const todoItem = {
-      label: fieldValue,
+      label: label,
       completed: false,
       id: itemId
     }
     const newTodoList = [...todoList, todoItem]
     setTodoList(newTodoList);
     setFieldValue("");
+    setTouchedFieldValue(false);
   }
   const onToggleTodoComplete = todoId => {
     const newTodoList = todoList.map(todo => {
@@ -39,7 +48,11 @@ export default () => {
 
     setTodoList(newTodoList);
   }
-  
+  const fieldValidator = (value) => {
+    const valueLength = value.length;
+    return (valueLength <= maxLength) && (valueLength >= 1);
+  }
+
   return (
     <div className="todo">
         <h1 className="todo__header">Todos</h1>
@@ -47,6 +60,8 @@ export default () => {
           value={fieldValue} 
           onChange={onChangeFieldValueHandler}
           onSubmit={onAddTodoHandler}
+          isValid={fieldValidator(fieldValue)}
+          touched={isTouchedFieldValue}
         />
         <TodoList 
           todos={todoList} 
